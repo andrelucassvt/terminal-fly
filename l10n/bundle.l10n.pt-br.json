@@ -1,0 +1,15 @@
+{
+  "Terminal Fly: node-pty not found; using simplified mode (the shell will not be resized).": "Terminal Fly: node-pty não encontrado; usando modo simplificado (sem redimensionar o shell).",
+  "Failed to start the shell: {0}": "Falha ao iniciar o shell: {0}",
+  "Open Terminal Fly": "Abrir Terminal Fly",
+  "New terminal (or double-click the canvas)": "Novo terminal (duplo clique no canvas também cria)",
+  "Arrange in grid": "Organizar em grade",
+  "Fit all to screen": "Ajustar todos à tela",
+  "Zoom out": "Diminuir zoom",
+  "Reset to 100%": "Voltar para 100%",
+  "Zoom in": "Aumentar zoom",
+  "Drag the background to pan · ⌘/Ctrl + scroll or pinch to zoom · double-click for a new terminal": "Arraste o fundo para mover · ⌘/Ctrl + scroll ou pinça para zoom · duplo clique para novo terminal",
+  "Change color": "Trocar cor",
+  "Double-click to rename": "Duplo clique para renomear",
+  "Close terminal": "Fechar terminal"
+}

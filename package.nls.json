@@ -1,0 +1,10 @@
+{
+  "description": "Free-floating terminals on an infinite canvas, inspired by Apple Freeform: drag, resize and see all your terminals at once.",
+  "command.open": "Open Terminal Fly",
+  "command.newTerminal": "New Terminal",
+  "command.fitAll": "Fit All Terminals to Screen",
+  "command.tile": "Arrange Terminals in Grid",
+  "config.defaultWidth": "Width (px at 100% zoom) of a new terminal.",
+  "config.defaultHeight": "Height (px at 100% zoom) of a new terminal.",
+  "config.restoreLayout": "When reopening Terminal Fly, recreate the terminals at their saved positions (with new shells)."
+}

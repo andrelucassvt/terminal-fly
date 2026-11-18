@@ -1,0 +1,7 @@
+.vscode/**
+*.vsix
+node_modules/@xterm/*/src/**
+node_modules/@xterm/*/typings/**
+node_modules/**/*.map
+media/icon.svg
+images/**

@@ -1,0 +1,10 @@
+{
+  "description": "Terminais livres num canvas infinito, inspirado no Freeform da Apple: arraste, redimensione e veja todos os terminais ao mesmo tempo.",
+  "command.open": "Abrir Terminal Fly",
+  "command.newTerminal": "Novo terminal",
+  "command.fitAll": "Ajustar todos os terminais à tela",
+  "command.tile": "Organizar terminais em grade",
+  "config.defaultWidth": "Largura (px, zoom 100%) de um terminal novo.",
+  "config.defaultHeight": "Altura (px, zoom 100%) de um terminal novo.",
+  "config.restoreLayout": "Ao reabrir o Terminal Fly, recria os terminais nas posições salvas (com shells novos)."
+}

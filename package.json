@@ -1,0 +1,116 @@
+{
+  "name": "terminal-fly",
+  "displayName": "Terminal Fly",
+  "description": "%description%",
+  "version": "0.1.0",
+  "publisher": "andresalvador",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrelucassvt/terminal-fly"
+  },
+  "homepage": "https://github.com/andrelucassvt/terminal-fly#readme",
+  "bugs": {
+    "url": "https://github.com/andrelucassvt/terminal-fly/issues"
+  },
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#1C1E22",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "terminal",
+    "canvas",
+    "freeform",
+    "layout",
+    "multiple terminals",
+    "split terminal",
+    "tiling",
+    "workspace"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onWebviewPanel:terminalFly",
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "terminalFly.open",
+        "title": "%command.open%",
+        "category": "Terminal Fly",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "terminalFly.newTerminal",
+        "title": "%command.newTerminal%",
+        "category": "Terminal Fly",
+        "icon": "$(add)"
+      },
+      {
+        "command": "terminalFly.fitAll",
+        "title": "%command.fitAll%",
+        "category": "Terminal Fly"
+      },
+      {
+        "command": "terminalFly.tile",
+        "title": "%command.tile%",
+        "category": "Terminal Fly"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "terminalFly.open",
+          "when": "view == terminal",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "terminalFly.open",
+        "key": "ctrl+alt+`",
+        "mac": "cmd+alt+`"
+      },
+      {
+        "command": "terminalFly.newTerminal",
+        "key": "ctrl+shift+`",
+        "mac": "ctrl+shift+`",
+        "when": "activeWebviewPanelId == 'terminalFly'"
+      }
+    ],
+    "configuration": {
+      "title": "Terminal Fly",
+      "properties": {
+        "terminalFly.defaultWidth": {
+          "type": "number",
+          "default": 680,
+          "description": "%config.defaultWidth%"
+        },
+        "terminalFly.defaultHeight": {
+          "type": "number",
+          "default": 400,
+          "description": "%config.defaultHeight%"
+        },
+        "terminalFly.restoreLayout": {
+          "type": "boolean",
+          "default": true,
+          "description": "%config.restoreLayout%"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/addon-web-links": "^0.12.0",
+    "@xterm/xterm": "^5.5.0"
+  },
+  "l10n": "./l10n"
+}
