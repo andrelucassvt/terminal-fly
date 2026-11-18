@@ -19,6 +19,8 @@ Every card is a real shell, using your default profile, font and theme.
 - **Layout is saved per workspace**: positions, sizes, names, colors and camera come back when you reopen.
 - Follows `terminal.integrated.*` settings (font family, size, line height, scrollback) and your color theme.
 - Clickable links in terminal output.
+- Same keyboard shortcuts as the integrated terminal: `Cmd+K` clears, `Cmd+←/→` jumps to line start/end,
+  `Option+←/→` moves by word, and shell keys like `Ctrl+R` or `Ctrl+C` stay in the shell.
 
 ## Getting started
 

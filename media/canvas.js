@@ -217,6 +217,7 @@
       term.loadAddon(new WebLinksAddon.WebLinksAddon((_e, uri) => vscode.postMessage({ type: 'openLink', uri })));
     }
     term.open(termEl);
+    setupKeys(term);
     c.term = term;
     c.fit = fit;
     cards.set(c.id, c);
@@ -316,6 +317,77 @@
     cards.delete(id);
     if (focusedId === id) focusedId = null;
     saveSoon();
+  }
+
+  // ---------------------------------------------------------------- teclado
+  // Dentro de um webview, o VS Code recebe todas as teclas (Cmd+K vira início de
+  // atalho de duas teclas, Ctrl+R abre "Recentes" etc.). Aqui imitamos o terminal
+  // integrado: atalhos de terminal ficam no shell; só os globais vão pro VS Code.
+  const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+
+  // Atalhos que o terminal integrado do VS Code trata ele mesmo.
+  function localAction(e, term) {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (isMac) {
+      if (e.metaKey && !e.ctrlKey && !e.altKey) {
+        if (k === 'k' && !e.shiftKey) return () => term.clear();
+        if (k === 'a' && !e.shiftKey) return () => term.selectAll();
+        if (k === 'ArrowLeft') return () => term.input('\x01');   // início da linha
+        if (k === 'ArrowRight') return () => term.input('\x05');  // fim da linha
+        if (k === 'Backspace') return () => term.input('\x15');   // apaga até o início
+        if (k === 'ArrowUp' && !e.shiftKey) return () => term.scrollToTop();
+        if (k === 'ArrowDown' && !e.shiftKey) return () => term.scrollToBottom();
+      }
+      if (e.altKey && !e.metaKey && !e.ctrlKey && !config.macOptionIsMeta) {
+        if (k === 'ArrowLeft') return () => term.input('\x1bb');  // palavra anterior
+        if (k === 'ArrowRight') return () => term.input('\x1bf'); // próxima palavra
+        if (k === 'Backspace') return () => term.input('\x17');   // apaga palavra
+      }
+    } else if (e.ctrlKey && !e.altKey && !e.metaKey) {
+      if (e.shiftKey && k === 'a') return () => term.selectAll();
+      if (!e.shiftKey && k === 'Backspace') return () => term.input('\x17');
+      if (!e.shiftKey && k === 'ArrowLeft') return () => term.input('\x1bb');
+      if (!e.shiftKey && k === 'ArrowRight') return () => term.input('\x1bf');
+    }
+    return null;
+  }
+
+  // Atalhos que devem continuar indo pro VS Code (paleta, busca de arquivo,
+  // trocar de aba, salvar...). Todo o resto fica no terminal.
+  function goesToVSCode(e) {
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (k === 'F1') return true;
+    if (e.ctrlKey && (k === '`' || k === 'Tab')) return true;
+    if (isMac) {
+      if (!e.metaKey) return false;          // Ctrl/Option + tecla: shell
+      if (k === 'c' || k === 'v' || k === 'x') return true; // copiar/colar nativos
+      return true;                           // demais Cmd+…: VS Code
+    }
+    if (!e.ctrlKey || e.altKey) return false;
+    if (e.shiftKey) return !['c', 'v'].includes(k); // Ctrl+Shift+P etc.
+    return ['p', ',', 'v'].includes(k);       // Ctrl+P, Ctrl+, e colar
+  }
+
+  function setupKeys(term) {
+    term.attachCustomKeyEventHandler((e) => {
+      if (e.type !== 'keydown') return true;
+      const act = localAction(e, term);
+      if (act) {
+        e.preventDefault();
+        act();
+        return false;
+      }
+      // No Mac, xterm ignora Cmd+tecla; deixamos o VS Code cuidar.
+      if (isMac && e.metaKey) return false;
+      return true;
+    });
+    // Roda depois do xterm (mesmo elemento, registrado depois) e impede que a
+    // tecla suba até o listener do VS Code.
+    const stop = (e) => {
+      if (localAction(e, term) || !goesToVSCode(e)) e.stopPropagation();
+    };
+    term.textarea.addEventListener('keydown', stop);
+    term.textarea.addEventListener('keyup', stop);
   }
 
   // Arraste genérico com pointer capture.
