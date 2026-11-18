@@ -2,7 +2,7 @@
   "name": "terminal-fly",
   "displayName": "Terminal Fly",
   "description": "%description%",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "publisher": "andresalvador",
   "license": "MIT",
   "repository": {
@@ -103,6 +103,19 @@
           "type": "boolean",
           "default": true,
           "description": "%config.restoreLayout%"
+        },
+        "terminalFly.wheelBehavior": {
+          "type": "string",
+          "enum": [
+            "pan",
+            "zoom"
+          ],
+          "default": "pan",
+          "enumDescriptions": [
+            "%config.wheelBehavior.pan%",
+            "%config.wheelBehavior.zoom%"
+          ],
+          "description": "%config.wheelBehavior%"
         }
       }
     }

@@ -135,6 +135,7 @@ class CanvasPanel {
       cursorBlink: t.get('cursorBlinking') ?? true,
       macOptionIsMeta: t.get('macOptionIsMeta') ?? false,
       scrollback: t.get('scrollback') || 5000,
+      wheelBehavior: c.get('wheelBehavior') === 'zoom' ? 'zoom' : 'pan',
       defaultWidth: c.get('defaultWidth') || 680,
       defaultHeight: c.get('defaultHeight') || 400,
       ptyAvailable: !!loadPty(),
@@ -206,6 +207,10 @@ class CanvasPanel {
       case 'layout':
         this.context.workspaceState.update(LAYOUT_KEY, m.layout);
         break;
+      case 'setWheel':
+        vscode.workspace.getConfiguration('terminalFly')
+          .update('wheelBehavior', m.value === 'zoom' ? 'zoom' : 'pan', vscode.ConfigurationTarget.Global);
+        break;
       case 'openLink':
         if (m.uri) vscode.env.openExternal(vscode.Uri.parse(m.uri));
         break;
@@ -267,6 +272,17 @@ class CanvasPanel {
   <button id="btn-zoom-out" title="${esc(t('Zoom out'))}"><svg viewBox="0 0 16 16"><path d="M3 8h10"/></svg></button>
   <button id="zoom-label" class="label" title="${esc(t('Reset to 100%'))}">100%</button>
   <button id="btn-zoom-in" title="${esc(t('Zoom in'))}"><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg></button>
+  <div class="sep"></div>
+  <button id="btn-settings" title="${esc(t('Scroll wheel behavior'))}" aria-haspopup="menu">
+    <svg viewBox="0 0 16 16"><rect x="4.5" y="1.5" width="7" height="13" rx="3.5"/><path d="M8 4v2.5"/></svg>
+  </button>
+</div>
+
+<div class="menu" id="settings-menu" role="menu" hidden>
+  <div class="menu-title">${esc(t('Mouse scroll wheel'))}</div>
+  <button class="menu-item" role="menuitemradio" data-wheel="pan"><span class="check"></span><span>${esc(t('Moves the canvas'))}</span></button>
+  <button class="menu-item" role="menuitemradio" data-wheel="zoom"><span class="check"></span><span>${esc(t('Zooms in and out'))}</span></button>
+  <div class="menu-note">${esc(t('Over a terminal, the wheel always scrolls its output. ⌘/Ctrl + scroll always zooms.'))}</div>
 </div>
 
 <div class="hint" id="hint">${esc(t('Drag the background to pan · ⌘/Ctrl + scroll or pinch to zoom · double-click for a new terminal'))}</div>

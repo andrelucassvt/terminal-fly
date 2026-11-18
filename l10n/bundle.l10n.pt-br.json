@@ -11,5 +11,10 @@
   "Drag the background to pan · ⌘/Ctrl + scroll or pinch to zoom · double-click for a new terminal": "Arraste o fundo para mover · ⌘/Ctrl + scroll ou pinça para zoom · duplo clique para novo terminal",
   "Change color": "Trocar cor",
   "Double-click to rename": "Duplo clique para renomear",
-  "Close terminal": "Fechar terminal"
+  "Close terminal": "Fechar terminal",
+  "Scroll wheel behavior": "Comportamento da rodinha do mouse",
+  "Mouse scroll wheel": "Rodinha do mouse",
+  "Moves the canvas": "Move o canvas",
+  "Zooms in and out": "Aumenta e diminui o zoom",
+  "Over a terminal, the wheel always scrolls its output. ⌘/Ctrl + scroll always zooms.": "Sobre um terminal, a rodinha sempre rola o conteúdo dele. ⌘/Ctrl + rodinha sempre dá zoom."
 }

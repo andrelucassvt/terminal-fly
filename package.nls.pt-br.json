@@ -6,5 +6,8 @@
   "command.tile": "Organizar terminais em grade",
   "config.defaultWidth": "Largura (px, zoom 100%) de um terminal novo.",
   "config.defaultHeight": "Altura (px, zoom 100%) de um terminal novo.",
-  "config.restoreLayout": "Ao reabrir o Terminal Fly, recria os terminais nas posições salvas (com shells novos)."
+  "config.restoreLayout": "Ao reabrir o Terminal Fly, recria os terminais nas posições salvas (com shells novos).",
+  "config.wheelBehavior": "O que a rodinha do mouse faz no fundo do canvas. Sobre um terminal ela sempre rola o terminal, e ⌘/Ctrl + scroll sempre dá zoom.",
+  "config.wheelBehavior.pan": "A rodinha move o canvas.",
+  "config.wheelBehavior.zoom": "A rodinha aumenta e diminui o zoom (Shift + rodinha ainda move o canvas)."
 }

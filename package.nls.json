@@ -6,5 +6,8 @@
   "command.tile": "Arrange Terminals in Grid",
   "config.defaultWidth": "Width (px at 100% zoom) of a new terminal.",
   "config.defaultHeight": "Height (px at 100% zoom) of a new terminal.",
-  "config.restoreLayout": "When reopening Terminal Fly, recreate the terminals at their saved positions (with new shells)."
+  "config.restoreLayout": "When reopening Terminal Fly, recreate the terminals at their saved positions (with new shells).",
+  "config.wheelBehavior": "What the mouse scroll wheel does on the canvas background. Over a terminal it always scrolls the terminal, and ⌘/Ctrl + scroll always zooms.",
+  "config.wheelBehavior.pan": "Scrolling moves the canvas.",
+  "config.wheelBehavior.zoom": "Scrolling zooms in and out (Shift + scroll still moves the canvas)."
 }

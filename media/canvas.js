@@ -20,7 +20,7 @@
   let cam = { x: 0, y: 0, z: 1 };
   let config = {
     fontFamily: 'Menlo, Monaco, monospace', fontSize: 12, lineHeight: 1, cursorBlink: true,
-    macOptionIsMeta: false, scrollback: 5000, defaultWidth: 680, defaultHeight: 400,
+    macOptionIsMeta: false, scrollback: 5000, wheelBehavior: 'pan', defaultWidth: 680, defaultHeight: 400,
   };
   /** @type {Map<string, any>} */
   const cards = new Map();
@@ -328,6 +328,12 @@
   // Atalhos que o terminal integrado do VS Code trata ele mesmo.
   function localAction(e, term) {
     const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    // Shift+Enter: quebra de linha sem enviar. Manda ESC+CR (Meta+Enter), que é o
+    // que CLIs como Claude Code e Codex entendem como "nova linha", e no zsh
+    // insere uma quebra literal no comando.
+    if (k === 'Enter' && e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      return () => term.input('\x1b\r');
+    }
     if (isMac) {
       if (e.metaKey && !e.ctrlKey && !e.altKey) {
         if (k === 'k' && !e.shiftKey) return () => term.clear();
@@ -447,6 +453,12 @@
     if (e.target.closest && e.target.closest('.term')) return; // rolar o terminal
     e.preventDefault();
     hideHint();
+    if (config.wheelBehavior === 'zoom' && !e.shiftKey) {
+      // modo zoom: a rodinha aproxima/afasta (Shift + rodinha ainda move)
+      const d = clamp((e.deltaY || e.deltaX) * (e.deltaMode === 1 ? 33 : 1), -100, 100);
+      zoomAt(e.clientX, e.clientY, Math.exp(-d * 0.0025));
+      return;
+    }
     const k = e.deltaMode === 1 ? 16 : 1;
     const dx = e.shiftKey && !e.deltaX ? e.deltaY : e.deltaX;
     const dy = e.shiftKey && !e.deltaX ? 0 : e.deltaY;
@@ -511,6 +523,36 @@
   document.getElementById('btn-zoom-out').addEventListener('click', () => animate(() => zoomCenter(0.8)));
   zoomLabel.addEventListener('click', () => animate(() => zoomCenter(1 / cam.z)));
 
+  // ---------------------------------------------------------------- menu do scroll
+  const btnSettings = document.getElementById('btn-settings');
+  const menu = document.getElementById('settings-menu');
+  function syncMenu() {
+    menu.querySelectorAll('.menu-item').forEach((b) => {
+      const on = b.dataset.wheel === config.wheelBehavior;
+      b.classList.toggle('checked', on);
+      b.setAttribute('aria-checked', String(on));
+    });
+    btnSettings.classList.toggle('active', config.wheelBehavior === 'zoom');
+  }
+  function closeMenu() { menu.hidden = true; }
+  btnSettings.addEventListener('click', (e) => {
+    e.stopPropagation();
+    syncMenu();
+    menu.hidden = !menu.hidden;
+  });
+  menu.addEventListener('click', (e) => {
+    const item = e.target.closest('.menu-item');
+    if (!item) return;
+    config.wheelBehavior = item.dataset.wheel;
+    syncMenu();
+    vscode.postMessage({ type: 'setWheel', value: config.wheelBehavior });
+    setTimeout(closeMenu, 120);
+  });
+  document.addEventListener('pointerdown', (e) => {
+    if (!menu.hidden && !menu.contains(e.target) && !btnSettings.contains(e.target)) closeMenu();
+  }, true);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
   function hideHint() { hint.classList.add('hidden'); }
   setTimeout(hideHint, 7000);
 
@@ -540,6 +582,7 @@
     switch (m.type) {
       case 'init': {
         config = Object.assign(config, m.config || {});
+        syncMenu();
         const layout = m.layout || vscode.getState();
         if (layout && layout.cam) cam = { x: layout.cam.x, y: layout.cam.y, z: clamp(layout.cam.z || 1, MIN_Z, MAX_Z) };
         else {
@@ -558,6 +601,7 @@
       }
       case 'config': {
         config = Object.assign(config, m.config || {});
+        syncMenu();
         for (const c of cards.values()) {
           c.term.options.fontFamily = config.fontFamily;
           c.term.options.lineHeight = config.lineHeight;

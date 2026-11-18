@@ -13,6 +13,7 @@ Every card is a real shell, using your default profile, font and theme.
 ## Features
 
 - **Infinite canvas** with a dot grid: pan by dragging the background, zoom with pinch or `⌘/Ctrl + scroll`.
+  Prefer zooming with the plain mouse wheel? Switch it in the mouse button next to the zoom controls.
 - **Floating terminal cards**: drag by the colored title bar, resize from the edges and corners.
 - **Arrange in grid** and **Fit all to screen** with one click.
 - **Rename** a terminal by double-clicking its title; **change its color** by clicking the dot.
@@ -51,6 +52,7 @@ Tip: drag the Terminal Fly tab out of the window to keep your terminals on a sep
 | --- | --- | --- |
 | `terminalFly.defaultWidth` | `680` | Width (px at 100% zoom) of a new terminal |
 | `terminalFly.defaultHeight` | `400` | Height (px at 100% zoom) of a new terminal |
+| `terminalFly.wheelBehavior` | `pan` | Mouse wheel on the canvas: `pan` moves it, `zoom` zooms in and out (also toggled from the mouse button next to the zoom controls) |
 | `terminalFly.restoreLayout` | `true` | Recreate terminals at their saved positions when reopening |
 
 ## Notes
